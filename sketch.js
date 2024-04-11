@@ -75,8 +75,8 @@ function loadGalleryImages() {
   ];
 
   imgUrls.forEach((url, i) => {
-    let img = loadImage(url, () => {
-      galleryImages[i] = img;
+    loadImage(url, (img) => {
+      galleryImages.push(img);
     });
   });
 }
@@ -87,7 +87,7 @@ function toggleGallery() {
 
 function drawGallery() {
   fill(255);
-  rect(width - 330, 0, 327, 344);
+  rect(width - 330, 0, 327, height);
 
   galleryImages.forEach((img, i) => {
     if (img && img.width > 0 && img.height > 0) {

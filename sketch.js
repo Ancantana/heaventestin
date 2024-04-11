@@ -52,7 +52,7 @@ function draw() {
   });
 
   // Draw resize handles on the selected image
-  if (selectedImage) {
+  if (selectedImage && selectedImage.selected) {
     let { x, y, w, h } = selectedImage;
     fill(255, 0, 0);
     rect(x + w - resizeHandleSize, y + h - resizeHandleSize, resizeHandleSize, resizeHandleSize);
@@ -132,20 +132,24 @@ function mousePressed() {
         selectedImage = draggedImages[i];
         dragOffsetX = mouseX - x;
         dragOffsetY = mouseY - y;
+
+        // Check if the mouse is over the resize handle of the selected image
+        if (
+          mouseX >= x + w - resizeHandleSize &&
+          mouseX <= x + w &&
+          mouseY >= y + h - resizeHandleSize &&
+          mouseY <= y + h
+        ) {
+          resizeDirection = 'se';
+        }
       }
     });
 
-    // Check if the mouse is over the resize handle of the selected image
-    if (selectedImage) {
-      let { x, y, w, h } = selectedImage;
-      if (
-        mouseX >= x + w - resizeHandleSize &&
-        mouseX <= x + w &&
-        mouseY >= y + h - resizeHandleSize &&
-        mouseY <= y + h
-      ) {
-        resizeDirection = 'se';
-      }
+    // Deselect the image if clicked outside
+    if (!selectedImage) {
+      draggedImages.forEach((img) => {
+        img.selected = false;
+      });
     }
   }
 }
@@ -166,7 +170,7 @@ function mouseDragged() {
       imgY + imgH > height
     ) {
       // Add the dragged image to the draggedImages array
-      draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, isDragged: false });
+      draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, isDragged: false, selected: false });
       draggedImage = null; // Reset draggedImage to allow dragging a new image from the gallery
     }
   } else {
@@ -178,7 +182,7 @@ function mouseDragged() {
 
     // Check if the selected image is being resized
     if (selectedImage && resizeDirection === 'se') {
-      let { x, y, w, h } = selectedImage;
+      let { x, y } = selectedImage;
       selectedImage.w = mouseX - x;
       selectedImage.h = mouseY - y;
     }
@@ -187,8 +191,11 @@ function mouseDragged() {
 
 function mouseReleased() {
   draggedImage = null;
-  selectedImage = null;
   resizeDirection = '';
+
+  if (selectedImage) {
+    selectedImage.selected = true;
+  }
 }
 
 function keyPressed() {

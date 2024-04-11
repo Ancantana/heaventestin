@@ -54,8 +54,14 @@ function draw() {
   // Draw resize handles on the selected image
   if (selectedImage && selectedImage.selected) {
     let { x, y, w, h } = selectedImage;
-    fill(255, 0, 0);
-    rect(x + w - resizeHandleSize, y + h - resizeHandleSize, resizeHandleSize, resizeHandleSize);
+    
+    // Draw the resize handle as two arrows
+    fill(255);
+    stroke(0);
+    strokeWeight(2);
+    line(x + w - 10, y + h - 5, x + w - 5, y + h - 10);
+    line(x + w - 10, y + h - 5, x + w - 15, y + h);
+    line(x + w - 5, y + h - 10, x + w, y + h - 15);
   }
 }
 
@@ -198,7 +204,7 @@ function mouseReleased() {
 }
 
 function keyPressed() {
-  if (keyCode === DELETE && selectedImage) {
+  if (keyCode === BACKSPACE && selectedImage) {
     const index = draggedImages.indexOf(selectedImage);
     if (index !== -1) {
       draggedImages.splice(index, 1);

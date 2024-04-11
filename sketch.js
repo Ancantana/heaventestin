@@ -5,10 +5,8 @@ let galleryImages = [];
 let draggedImages = [];
 let plusButton, downloadButton;
 let selectedImage = null;
-let offsetX, offsetY;
 let draggedImage = null;
 let dragOffsetX, dragOffsetY;
-let imageScaleFactor = 1;
 let resizeDirection = '';
 
 function preload() {
@@ -42,7 +40,7 @@ function draw() {
   }
 
   // Draw dragged images
-  draggedImages.forEach(({ img, x, y, w, h }, i) => {
+  draggedImages.forEach(({ img, x, y, w, h }) => {
     image(img, x, y, w, h);
   });
 
@@ -128,15 +126,16 @@ function mousePressed() {
     });
 
     // Check if the mouse is over a dragged image
-    draggedImages.forEach(({ img, x, y, w, h }, i) => {
+    draggedImages.forEach((draggedImg, i) => {
+      let { img, x, y, w, h } = draggedImg;
       if (
         mouseX >= x &&
         mouseX <= x + w &&
         mouseY >= y &&
         mouseY <= y + h
       ) {
-        selectedImage = draggedImages[i];
-        selectedImage.selected = true; // Set selected property to true
+        selectedImage = draggedImg;
+        selectedImage.selected = true;
         dragOffsetX = mouseX - x;
         dragOffsetY = mouseY - y;
 
@@ -154,8 +153,8 @@ function mousePressed() {
 
     // Deselect the image if clicked outside
     if (!selectedImage) {
-      draggedImages.forEach((img) => {
-        img.selected = false;
+      draggedImages.forEach((draggedImg) => {
+        draggedImg.selected = false;
       });
     }
   }
@@ -178,20 +177,19 @@ function mouseDragged() {
     ) {
       // Add the dragged image to the draggedImages array
       draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, selected: false });
-      draggedImage = null; // Reset draggedImage to allow dragging a new image from the gallery
+      draggedImage = null;
     }
-  } else {
+  } else if (selectedImage) {
     // Check if the selected image is being moved
-    if (selectedImage && resizeDirection === '') {
+    if (resizeDirection === '') {
       selectedImage.x = mouseX - dragOffsetX;
       selectedImage.y = mouseY - dragOffsetY;
     }
 
     // Check if the selected image is being resized
-    if (selectedImage && resizeDirection === 'se') {
-      let { x, y } = selectedImage;
-      selectedImage.w = mouseX - x;
-      selectedImage.h = mouseY - y;
+    if (resizeDirection === 'se') {
+      selectedImage.w = mouseX - selectedImage.x;
+      selectedImage.h = mouseY - selectedImage.y;
     }
   }
 }

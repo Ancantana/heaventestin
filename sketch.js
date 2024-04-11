@@ -9,6 +9,7 @@ let offsetX, offsetY;
 let draggedImage = null;
 let dragOffsetX, dragOffsetY;
 let imageScaleFactor = 1;
+let resizeDirection = '';
 
 function preload() {
   bgImage = loadImage('AFTERLIFE.png');
@@ -150,14 +151,7 @@ function mousePressed() {
           mouseY >= y + h - 32 &&
           mouseY <= y + h - 10
         ) {
-          // Handle resize button click
-          let newWidth = prompt('Enter new width:', selectedImage.w);
-          let newHeight = prompt('Enter new height:', selectedImage.h);
-
-          if (newWidth !== null && newHeight !== null) {
-            selectedImage.w = parseInt(newWidth);
-            selectedImage.h = parseInt(newHeight);
-          }
+          resizeDirection = 'se';
         }
       }
     });
@@ -192,15 +186,23 @@ function mouseDragged() {
     }
   } else {
     // Check if the selected image is being moved
-    if (selectedImage) {
+    if (selectedImage && resizeDirection === '') {
       selectedImage.x = mouseX - dragOffsetX;
       selectedImage.y = mouseY - dragOffsetY;
+    }
+
+    // Check if the selected image is being resized
+    if (selectedImage && resizeDirection === 'se') {
+      let { x, y } = selectedImage;
+      selectedImage.w = mouseX - x;
+      selectedImage.h = mouseY - y;
     }
   }
 }
 
 function mouseReleased() {
   draggedImage = null;
+  resizeDirection = '';
 }
 
 function keyPressed() {

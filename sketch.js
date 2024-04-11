@@ -130,6 +130,7 @@ function mousePressed() {
         mouseY <= y + h
       ) {
         selectedImage = draggedImages[i];
+        selectedImage.selected = true; // Set selected property to true
         dragOffsetX = mouseX - x;
         dragOffsetY = mouseY - y;
 
@@ -192,10 +193,8 @@ function mouseDragged() {
 function mouseReleased() {
   draggedImage = null;
   resizeDirection = '';
-
-  if (selectedImage) {
-    selectedImage.selected = true;
-  }
+  
+  // Remove the code that sets selectedImage to null
 }
 
 function keyPressed() {

@@ -9,8 +9,6 @@ let offsetX, offsetY;
 let draggedImage = null;
 let dragOffsetX, dragOffsetY;
 let imageScaleFactor = 1;
-let resizeHandleSize = 10;
-let resizeDirection = '';
 
 function preload() {
   bgImage = loadImage('AFTERLIFE.png');
@@ -22,13 +20,13 @@ function setup() {
   textInput.position(width / 2 - textInput.width / 2, height / 2);
 
   plusButton = createImg('plusbutton.png', 'plus button');
-  plusButton.position(20, 80);
-  plusButton.size(30, 30);
+  plusButton.position(20, 20);
+  plusButton.size(40, 40);
   plusButton.mousePressed(toggleGallery);
 
   downloadButton = createImg('heaveanangel.png', 'download button');
-  downloadButton.position(20, 120);
-  downloadButton.size(30, 30);
+  downloadButton.position(20, 70);
+  downloadButton.size(40, 40);
   downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
 
   loadGalleryImages();
@@ -51,17 +49,22 @@ function draw() {
     }
   });
 
-  // Draw resize handles on the selected image
+  // Draw resize button on the selected image
   if (selectedImage && selectedImage.selected) {
     let { x, y, w, h } = selectedImage;
-    
-    // Draw the resize handle as two arrows
-    fill(255);
-    stroke(0);
-    strokeWeight(2);
-    line(x + w - 10, y + h - 5, x + w - 5, y + h - 10);
-    line(x + w - 10, y + h - 5, x + w - 15, y + h);
-    line(x + w - 5, y + h - 10, x + w, y + h - 15);
+
+    // Draw the resize button
+    fill('#E8E8E8');
+    stroke('#6A6142');
+    strokeWeight(1);
+    rect(x + w - 65, y + h - 32, 55, 22, 18);
+
+    // Draw the "Resize" text
+    fill('#6A6142');
+    noStroke();
+    textAlign(CENTER, CENTER);
+    textSize(12);
+    text('Resize', x + w - 37.5, y + h - 21);
   }
 }
 
@@ -109,7 +112,7 @@ function drawGallery() {
 }
 
 function mousePressed() {
-  if (dist(mouseX, mouseY, 20, 80) < 15) {
+  if (dist(mouseX, mouseY, 20, 20) < 20) {
     toggleGallery();
   } else {
     galleryImages.forEach((img, i) => {
@@ -140,14 +143,21 @@ function mousePressed() {
         dragOffsetX = mouseX - x;
         dragOffsetY = mouseY - y;
 
-        // Check if the mouse is over the resize handle of the selected image
+        // Check if the mouse is over the resize button of the selected image
         if (
-          mouseX >= x + w - resizeHandleSize &&
-          mouseX <= x + w &&
-          mouseY >= y + h - resizeHandleSize &&
-          mouseY <= y + h
+          mouseX >= x + w - 65 &&
+          mouseX <= x + w - 10 &&
+          mouseY >= y + h - 32 &&
+          mouseY <= y + h - 10
         ) {
-          resizeDirection = 'se';
+          // Handle resize button click
+          let newWidth = prompt('Enter new width:', selectedImage.w);
+          let newHeight = prompt('Enter new height:', selectedImage.h);
+
+          if (newWidth !== null && newHeight !== null) {
+            selectedImage.w = parseInt(newWidth);
+            selectedImage.h = parseInt(newHeight);
+          }
         }
       }
     });
@@ -182,25 +192,15 @@ function mouseDragged() {
     }
   } else {
     // Check if the selected image is being moved
-    if (selectedImage && resizeDirection === '') {
+    if (selectedImage) {
       selectedImage.x = mouseX - dragOffsetX;
       selectedImage.y = mouseY - dragOffsetY;
-    }
-
-    // Check if the selected image is being resized
-    if (selectedImage && resizeDirection === 'se') {
-      let { x, y } = selectedImage;
-      selectedImage.w = mouseX - x;
-      selectedImage.h = mouseY - y;
     }
   }
 }
 
 function mouseReleased() {
   draggedImage = null;
-  resizeDirection = '';
-  
-  // Remove the code that sets selectedImage to null
 }
 
 function keyPressed() {

@@ -41,13 +41,9 @@ function draw() {
     drawGallery();
   }
 
-  // Draw dragged images on top
-  draggedImages.forEach(({ img, x, y, w, h, isDragged }, i) => {
-    if (isDragged) {
-      image(img, mouseX - dragOffsetX, mouseY - dragOffsetY, w * imageScaleFactor, h * imageScaleFactor);
-    } else {
-      image(img, x, y, w, h);
-    }
+  // Draw dragged images
+  draggedImages.forEach(({ img, x, y, w, h }, i) => {
+    image(img, x, y, w, h);
   });
 
   // Draw resize button on the selected image
@@ -170,8 +166,8 @@ function mouseDragged() {
     // Update the position of the dragged image
     let imgX = mouseX - dragOffsetX;
     let imgY = mouseY - dragOffsetY;
-    let imgW = draggedImage.width * imageScaleFactor;
-    let imgH = draggedImage.height * imageScaleFactor;
+    let imgW = draggedImage.width;
+    let imgH = draggedImage.height;
 
     // Check if the dragged image is outside the gallery
     if (
@@ -181,7 +177,7 @@ function mouseDragged() {
       imgY + imgH > height
     ) {
       // Add the dragged image to the draggedImages array
-      draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, isDragged: false, selected: false });
+      draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, selected: false });
       draggedImage = null; // Reset draggedImage to allow dragging a new image from the gallery
     }
   } else {

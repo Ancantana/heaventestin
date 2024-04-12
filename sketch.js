@@ -100,14 +100,14 @@ function toggleGallery() {
 
 function drawGallery() {
   fill(255);
-  rect(width - 330, 0, 327, height);
+  rect(width - 220, 0, 237, height);
 
   galleryImages.forEach((img, i) => {
     if (img && img.width > 0 && img.height > 0) {
       let imgX = width - 320;
       let imgY = i * 110 + 10;
-      let imgW = 100;
-      let imgH = 100;
+      let imgW = 50;
+      let imgH = 50;
 
       if (galleryVisible) {
         image(img, imgX, imgY, imgW, imgH);
@@ -130,8 +130,8 @@ function mousePressed() {
       if (img && img.width > 0 && img.height > 0) {
         let imgX = width - 320;
         let imgY = i * 110 + 10;
-        let imgW = 100;
-        let imgH = 100;
+        let imgW = 50;
+        let imgH = 50;
 
         if (mouseX >= imgX && mouseX <= imgX + imgW && mouseY >= imgY && mouseY <= imgY + imgH) {
           draggedImage = img;

@@ -63,7 +63,7 @@ function draw() {
 
     fill('#E8E8E8');
     stroke('#6A6142');
-    strokeWeight(1);
+    strokeWeight(4);
     rect(x + w - 65, y + h - 32, 55, 22, 18);
 
     fill('#6A6142');

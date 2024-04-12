@@ -50,7 +50,6 @@ function draw() {
   push();
   stroke(255);
   strokeWeight(4);
-  blur (3);
   noFill();
   rect(width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2, videoElement.width, videoElement.height);
   pop();

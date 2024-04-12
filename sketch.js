@@ -8,6 +8,7 @@ let selectedImage = null;
 let draggedImage = null;
 let dragOffsetX, dragOffsetY;
 let resizeDirection = '';
+let videoElement;
 
 function preload() {
   bgImage = loadImage('AFTERLIFE.png');
@@ -16,7 +17,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textInput = createInput('');
-  textInput.position(width / 2 - textInput.width / 2, height / 2);
+  textInput.position(width / 2 - textInput.width / 2, height / 2 + 100);
 
   plusButton = createImg('plusbutton.png', 'plus button');
   plusButton.position(20, 20);
@@ -27,6 +28,15 @@ function setup() {
   downloadButton.position(20, 70);
   downloadButton.size(40, 40);
   downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
+
+  videoElement = createCapture(VIDEO);
+  videoElement.size(197, 197);
+  videoElement.position(width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
+  videoElement.style('border-radius', '18px');
+
+  let captureButton = createButton('Capture Still Image');
+  captureButton.position(width / 2 - captureButton.width / 2, height / 2 - videoElement.height / 2 - 50);
+  captureButton.mousePressed(captureStillImage);
 
   loadGalleryImages();
 }
@@ -39,22 +49,20 @@ function draw() {
     drawGallery();
   }
 
-  // Draw dragged images
+  image(videoElement, width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
+
   draggedImages.forEach(({ img, x, y, w, h }) => {
     image(img, x, y, w, h);
   });
 
-  // Draw resize button on the selected image
   if (selectedImage && selectedImage.selected) {
     let { x, y, w, h } = selectedImage;
 
-    // Draw the resize button
     fill('#E8E8E8');
     stroke('#6A6142');
     strokeWeight(1);
     rect(x + w - 65, y + h - 32, 55, 22, 18);
 
-    // Draw the "Resize" text
     fill('#6A6142');
     noStroke();
     textAlign(CENTER, CENTER);
@@ -100,7 +108,6 @@ function drawGallery() {
         image(img, imgX, imgY, imgW, imgH);
       }
 
-      // Check if the mouse is over this image
       if (mouseX >= imgX && mouseX <= imgX + imgW && mouseY >= imgY && mouseY <= imgY + imgH) {
         cursor(MOVE);
       } else {
@@ -129,7 +136,6 @@ function mousePressed() {
       }
     });
 
-    // Check if the mouse is over a dragged image
     draggedImages.forEach((draggedImg, i) => {
       let { img, x, y, w, h } = draggedImg;
       if (
@@ -143,7 +149,6 @@ function mousePressed() {
         dragOffsetX = mouseX - x;
         dragOffsetY = mouseY - y;
 
-        // Check if the mouse is over the resize button of the selected image
         if (
           mouseX >= x + w - 65 &&
           mouseX <= x + w - 10 &&
@@ -155,7 +160,6 @@ function mousePressed() {
       }
     });
 
-    // Deselect the image if clicked outside
     if (!selectedImage) {
       draggedImages.forEach((draggedImg) => {
         draggedImg.selected = false;
@@ -166,31 +170,26 @@ function mousePressed() {
 
 function mouseDragged() {
   if (draggedImage) {
-    // Update the position of the dragged image
     let imgX = mouseX - dragOffsetX;
     let imgY = mouseY - dragOffsetY;
     let imgW = draggedImage.width;
     let imgH = draggedImage.height;
 
-    // Check if the dragged image is outside the gallery
     if (
       imgX < width - 330 ||
       imgX + imgW > width - 3 ||
       imgY < 0 ||
       imgY + imgH > height
     ) {
-      // Add the dragged image to the draggedImages array
       draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, selected: false });
       draggedImage = null;
     }
   } else if (selectedImage) {
-    // Check if the selected image is being moved
     if (resizeDirection === '') {
       selectedImage.x = mouseX - dragOffsetX;
       selectedImage.y = mouseY - dragOffsetY;
     }
 
-    // Check if the selected image is being resized
     if (resizeDirection === 'se') {
       selectedImage.w = mouseX - selectedImage.x;
       selectedImage.h = mouseY - selectedImage.y;
@@ -211,4 +210,9 @@ function keyPressed() {
       selectedImage = null;
     }
   }
+}
+
+function captureStillImage() {
+  const stillImage = videoElement.get();
+  galleryImages.push(stillImage);
 }

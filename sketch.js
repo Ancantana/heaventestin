@@ -9,7 +9,6 @@ let draggedImage = null;
 let dragOffsetX, dragOffsetY;
 let resizeDirection = '';
 let videoElement;
-let capturedImage = null;
 
 function preload() {
   bgImage = loadImage('AFTERLIFE.png');
@@ -37,10 +36,6 @@ function setup() {
   videoElement.style('border', '1px solid white');
   filter(BLUR, 1);
 
-  let captureButton = createButton('Capture Still Image');
-  captureButton.position(width / 2 - captureButton.width / 2, height / 2 - videoElement.height / 2 - 50);
-  captureButton.mousePressed(captureStillImage);
-
   loadGalleryImages();
 }
 
@@ -52,11 +47,7 @@ function draw() {
     drawGallery();
   }
 
-  if (capturedImage) {
-    image(capturedImage, width / 2 - capturedImage.width / 2, height / 2 - capturedImage.height / 2);
-  } else {
-    image(videoElement, width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
-  }
+  image(videoElement, width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
 
   draggedImages.forEach(({ img, x, y, w, h }) => {
     image(img, x, y, w, h);
@@ -217,9 +208,4 @@ function keyPressed() {
       selectedImage = null;
     }
   }
-}
-
-function captureStillImage() {
-  capturedImage = videoElement.get();
-  galleryImages.push(capturedImage);
 }

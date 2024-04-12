@@ -45,14 +45,15 @@ function draw() {
     drawGallery();
   }
 
+  image(videoElement, width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
+
   push();
+  filter(BLUR, 1);
   stroke(255);
   strokeWeight(1);
-  filter(BLUR, 1);
+  noFill();
   rect(width / 2 - videoElement.width / 2 - 1, height / 2 - videoElement.height / 2 - 1, videoElement.width + 2, videoElement.height + 2);
   pop();
-
-  image(videoElement, width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
 
   draggedImages.forEach(({ img, x, y, w, h }) => {
     image(img, x, y, w, h);
@@ -63,7 +64,7 @@ function draw() {
 
     fill('#E8E8E8');
     stroke('#6A6142');
-    strokeWeight(4);
+    strokeWeight(1);
     rect(x + w - 65, y + h - 32, 55, 22, 18);
 
     fill('#6A6142');

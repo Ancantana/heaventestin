@@ -21,15 +21,11 @@ function setup() {
   textInput = select('#text-input');
   textInput.hide();
 
-  plusButton = createImg('plusbutton.png', 'plus button');
-  plusButton.position(20, 20);
-  plusButton.size(40, 40);
+  plusButton = select('#plus-button');
   plusButton.mousePressed(toggleGallery);
 
-  downloadButton = createImg('heaveanangel.png', 'download button');
-  downloadButton.position(20, 70);
-  downloadButton.size(40, 40);
-  downloadButton.mousePressed(toggleVideoAndText);
+  downloadButton = select('#download-button');
+  downloadButton.mousePressed(downloadCanvas);
 
   snapButton = select('#snap-button');
   snapButton.mousePressed(takeSnapshot);
@@ -77,7 +73,7 @@ function draw() {
   if (videoVisible) {
     push();
     translate(width / 2, height / 2); // Move the coordinate system to the center
-    image(video, -98.5, -118.5, 197, 197); // Render the video feed centered
+    image(video, -98.5, -98.5, 197, 197); // Render the video feed centered
     pop();
     textInput.show(); // Show the text input
   } else {
@@ -275,4 +271,8 @@ function keyPressed() {
       selectedImage = null;
     }
   }
+}
+
+function downloadCanvas() {
+  saveCanvas('canvas', 'png');
 }

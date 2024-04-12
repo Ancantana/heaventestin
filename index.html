@@ -5,14 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My P5.js Website</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-  <link rel="stylesheet" href="style.css">
+  <script src="sketch.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    #canvas-container {
+      position: relative;
+    }
+    #video-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 197px;
+      height: 197px;
+      border: 3px solid white;
+      filter: blur(1px);
+      overflow: hidden;
+    }
+    #video-element {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    #snap-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      background-image: url('snapbutton.png');
+      background-size: cover;
+      cursor: pointer;
+    }
+    #text-input {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin-top: 120px;
+      padding: 10px;
+      font-size: 16px;
+      background-color: black;
+      color: white;
+      border: none;
+    }
+  </style>
 </head>
 <body>
   <div id="canvas-container">
     <div id="video-container">
       <video id="video-element" autoplay></video>
-      <button id="snap-button">Snap</button>
     </div>
+    <div id="snap-button"></div>
     <input type="text" id="text-input" />
   </div>
   <script src="sketch.js"></script>

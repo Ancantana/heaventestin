@@ -22,7 +22,7 @@ body {
 }
 
 #plus-button, #download-button {
-  width: 40px;
+  width: 20px;
   height: 40px;
   margin-bottom: 10px;
   cursor: pointer;

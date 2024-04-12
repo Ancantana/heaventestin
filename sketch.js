@@ -83,13 +83,13 @@ function draw() {
 
 function loadGalleryImages() {
   let imgUrls = [
-    'https://ancantana.github.io/heaven/original_77f8f96b25a80928f3f31b83d967fd2d.png',
-    'https://ancantana.github.io/heaven/original_052e51d86c2267360a21d5e9bfb41935.png',
-    'https://ancantana.github.io/heaven/original_29ab04b0486cb7c8845a663e33adfb13.png',
-    'https://ancantana.github.io/heaven/original_372f6230eb41e5f365737fcda89f50c3.png',
-    'https://ancantana.github.io/heaven/original_bd74eb6f0884a30cfb2d0af7943a14f9.png',
-    'https://ancantana.github.io/heaven/original_c14396968eb286bfacdd00e9a0577937.png',
-    'https://ancantana.github.io/heaven/original_c3c5f8eec85f4387b6a842cef208d51b.png'
+    'https://ancantana.github.io/heaventestin/original_77f8f96b25a80928f3f31b83d967fd2d.png',
+    'https://ancantana.github.io/heaventestin/original_052e51d86c2267360a21d5e9bfb41935.png',
+    'https://ancantana.github.io/heaventestin/original_29ab04b0486cb7c8845a663e33adfb13.png',
+    'https://ancantana.github.io/heaventestin/original_372f6230eb41e5f365737fcda89f50c3.png',
+    'https://ancantana.github.io/heaventestin/original_bd74eb6f0884a30cfb2d0af7943a14f9.png',
+    'https://ancantana.github.io/heaventestin/original_c14396968eb286bfacdd00e9a0577937.png',
+    'https://ancantana.github.io/heaventestin/original_c3c5f8eec85f4387b6a842cef208d51b.png'
   ];
 
   imgUrls.forEach((url, i) => {

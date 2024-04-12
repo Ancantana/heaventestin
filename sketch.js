@@ -17,10 +17,8 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  textInput = createInput('');
-  textInput.style('background-color', 'black');
-  textInput.style('color', 'white');
-  textInput.position(width / 2 - textInput.width / 2, height / 2 + 120);
+  textInput = select('#text-input');
+  textInput.hide();
 
   plusButton = createImg('plusbutton.png', 'plus button');
   plusButton.position(20, 20);
@@ -32,9 +30,7 @@ function setup() {
   downloadButton.size(40, 40);
   downloadButton.mousePressed(toggleVideoAndText);
 
-  snapButton = createImg('snapbutton.png', 'snap button');
-  snapButton.position(width / 2 + 75, height / 2 - 20);
-  snapButton.size(30, 30);
+  snapButton = select('#snap-button');
   snapButton.mousePressed(takeSnapshot);
   snapButton.hide();
 
@@ -42,7 +38,6 @@ function setup() {
 
   video = createCapture(VIDEO);
   video.size(197, 197);
-  video.position(width / 2 - video.width / 2, height / 2 - video.height / 2 - 100);
   video.hide();
 }
 
@@ -79,10 +74,7 @@ function draw() {
 
   // Display video feed
   if (videoVisible) {
-    image(video, width / 2 - video.width / 2, height / 2 - video.height / 2 - 100);
-    snapButton.show();
-  } else {
-    snapButton.hide();
+    image(video, 0, 0, 197, 197);
   }
 }
 

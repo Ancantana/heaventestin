@@ -32,7 +32,7 @@ function setup() {
   videoElement = createCapture(VIDEO, () => {
     videoElement.size(197, 197);
     videoElement.position(width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
-    videoElement.style('border-radius', '18px');
+    videoElement.style('border-radius', '8px');
     videoElement.hide();
   });
 

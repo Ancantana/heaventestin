@@ -3,46 +3,38 @@ let textInput;
 let galleryVisible = false;
 let galleryImages = [];
 let draggedImages = [];
-let plusButton, downloadButton, snapButton;
+let plusButton, downloadButton;
 let selectedImage = null;
 let draggedImage = null;
 let dragOffsetX, dragOffsetY;
 let resizeDirection = '';
-let video;
-let videoStream;
-let videoVisible = false;
 
 function preload() {
-  bgImage = loadImage('AFTERLIFE.png'); // Make sure the path is correct
+  bgImage = loadImage('AFTERLIFE.png');
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  textInput = select('#text-input');
-  textInput.hide();
+  textInput = createInput('');
+  textInput.position(width / 2 - textInput.width / 2, height / 2);
 
-  plusButton = select('#plus-button');
+  plusButton = createImg('plusbutton.png', 'plus button');
+  plusButton.position(20, 20);
+  plusButton.size(40, 40);
   plusButton.mousePressed(toggleGallery);
 
-  downloadButton = select('#download-button');
-  downloadButton.mousePressed(downloadCanvas);
-
-  snapButton = select('#snap-button');
-  snapButton.mousePressed(takeSnapshot);
-  snapButton.hide();
+  downloadButton = createImg('heaveanangel.png', 'download button');
+  downloadButton.position(20, 70);
+  downloadButton.size(40, 40);
+  downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
 
   loadGalleryImages();
-
-  video = createCapture(VIDEO);
-  video.size(197, 197);
-  video.hide();
 }
 
 function draw() {
   if (bgImage) {
-    background(bgImage); // Display the background image once
+    background(bgImage);
   }
-
   if (galleryVisible) {
     drawGallery();
   }
@@ -69,17 +61,6 @@ function draw() {
     textSize(12);
     text('Resize', x + w - 37.5, y + h - 21);
   }
-
-  // Display video feed and text input
-  if (videoVisible) {
-    push();
-    translate(width / 2, height / 2); // Move the coordinate system to the center
-    image(video, -98.5, -98.5, 197, 197); // Render the video feed centered
-    pop();
-    textInput.show(); // Show the text input
-  } else {
-    textInput.hide(); // Hide the text input
-  }
 }
 
 function loadGalleryImages() {
@@ -102,48 +83,6 @@ function loadGalleryImages() {
 
 function toggleGallery() {
   galleryVisible = !galleryVisible;
-}
-
-function startVideo() {
-  if (!videoStream) {
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
-        videoStream = stream;
-        video.elt.srcObject = stream;
-        video.play();
-      })
-      .catch(error => {
-        console.error('Error accessing camera:', error);
-      });
-  }
-}
-
-function stopVideo() {
-  if (videoStream) {
-    videoStream.getTracks().forEach(track => track.stop());
-    videoStream = null;
-  }
-}
-
-function toggleVideoAndText() {
-  videoVisible = !videoVisible;
-  if (videoVisible) {
-    textInput.show();
-    snapButton.show();
-    startVideo();
-  } else {
-    textInput.hide();
-    snapButton.hide();
-    stopVideo();
-  }
-}
-
-function takeSnapshot() {
-  let snapshot = createImage(197, 197);
-  snapshot.copy(video, 0, 0, 197, 197, 0, 0, 197, 197);
-  let snapshotX = width / 2 - 98.5;
-  let snapshotY = height / 2 - 98.5;
-  draggedImages.push({ img: snapshot, x: snapshotX, y: snapshotY, w: 197, h: 197, selected: false });
 }
 
 function drawGallery() {
@@ -272,8 +211,4 @@ function keyPressed() {
       selectedImage = null;
     }
   }
-}
-
-function downloadCanvas() {
-  saveCanvas('canvas', 'png');
 }

@@ -17,8 +17,10 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  textInput = select('#text-input');
+  textInput = createInput('');
+  textInput.style('background-color', 'black');
   textInput.style('color', 'white');
+  textInput.position(width / 2 - textInput.width / 2, height / 2 + 120);
 
   plusButton = createImg('plusbutton.png', 'plus button');
   plusButton.position(20, 20);
@@ -30,13 +32,17 @@ function setup() {
   downloadButton.size(40, 40);
   downloadButton.mousePressed(toggleVideoAndText);
 
-  snapButton = select('#snap-button');
+  snapButton = createImg('snapbutton.png', 'snap button');
+  snapButton.position(width / 2 + 75, height / 2 - 20);
+  snapButton.size(30, 30);
   snapButton.mousePressed(takeSnapshot);
+  snapButton.hide();
 
   loadGalleryImages();
 
   video = createCapture(VIDEO);
   video.size(197, 197);
+  video.position(width / 2 - video.width / 2, height / 2 - video.height / 2 - 100);
   video.hide();
 }
 
@@ -73,11 +79,10 @@ function draw() {
 
   // Display video feed
   if (videoVisible) {
-    let videoWidth = 197;
-    let videoHeight = 197;
-    let videoX = width / 2 - videoWidth / 2;
-    let videoY = height / 2 - videoHeight / 2 - 100;
-    image(video, videoX, videoY, videoWidth, videoHeight);
+    image(video, width / 2 - video.width / 2, height / 2 - video.height / 2 - 100);
+    snapButton.show();
+  } else {
+    snapButton.hide();
   }
 }
 
@@ -105,7 +110,15 @@ function toggleGallery() {
 
 function toggleVideoAndText() {
   videoVisible = !videoVisible;
-  textInput.style('display', videoVisible ? 'block' : 'none');
+  if (videoVisible) {
+    video.show();
+    textInput.show();
+    snapButton.show();
+  } else {
+    video.hide();
+    textInput.hide();
+    snapButton.hide();
+  }
 }
 
 function takeSnapshot() {

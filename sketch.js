@@ -194,7 +194,6 @@ function mouseDragged() {
       imgY + imgH <= height
     ) {
       draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, selected: false });
-      isDragging = false;
     }
   } else if (selectedImage) {
     if (resizeDirection === '') {

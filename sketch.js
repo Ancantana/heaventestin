@@ -3,11 +3,13 @@ let textInput;
 let galleryVisible = false;
 let galleryImages = [];
 let draggedImages = [];
-let plusButton, downloadButton;
+let plusButton, downloadButton, snapButton;
 let selectedImage = null;
 let draggedImage = null;
 let dragOffsetX, dragOffsetY;
 let resizeDirection = '';
+let video;
+let videoVisible = false;
 
 function preload() {
   bgImage = loadImage('AFTERLIFE.png');
@@ -15,8 +17,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  textInput = createInput('');
-  textInput.position(width / 2 - textInput.width / 2, height / 2);
+  textInput = select('#text-input');
 
   plusButton = createImg('plusbutton.png', 'plus button');
   plusButton.position(20, 20);
@@ -26,9 +27,16 @@ function setup() {
   downloadButton = createImg('heaveanangel.png', 'download button');
   downloadButton.position(20, 70);
   downloadButton.size(40, 40);
-  downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
+  downloadButton.mousePressed(toggleVideoAndText);
+
+  snapButton = select('#snap-button');
+  snapButton.mousePressed(takeSnapshot);
 
   loadGalleryImages();
+
+  video = createCapture(VIDEO);
+  video.size(197, 197);
+  video.hide();
 }
 
 function draw() {
@@ -61,17 +69,22 @@ function draw() {
     textSize(12);
     text('Resize', x + w - 37.5, y + h - 21);
   }
+
+  // Display video feed
+  if (videoVisible) {
+    image(video, width / 2 - 98.5, height / 2 - 218.5, 197, 197);
+  }
 }
 
 function loadGalleryImages() {
   let imgUrls = [
-    'https://ancantana.github.io/heaventestin/original_77f8f96b25a80928f3f31b83d967fd2d.png',
-    'https://ancantana.github.io/heaventestin/original_052e51d86c2267360a21d5e9bfb41935.png',
-    'https://ancantana.github.io/heaventestin/original_29ab04b0486cb7c8845a663e33adfb13.png',
-    'https://ancantana.github.io/heaventestin/original_372f6230eb41e5f365737fcda89f50c3.png',
-    'https://ancantana.github.io/heaventestin/original_bd74eb6f0884a30cfb2d0af7943a14f9.png',
-    'https://ancantana.github.io/heaventestin/original_c14396968eb286bfacdd00e9a0577937.png',
-    'https://ancantana.github.io/heaventestin/original_c3c5f8eec85f4387b6a842cef208d51b.png'
+    'https://ancantana.github.io/heaven/original_77f8f96b25a80928f3f31b83d967fd2d.png',
+    'https://ancantana.github.io/heaven/original_052e51d86c2267360a21d5e9bfb41935.png',
+    'https://ancantana.github.io/heaven/original_29ab04b0486cb7c8845a663e33adfb13.png',
+    'https://ancantana.github.io/heaven/original_372f6230eb41e5f365737fcda89f50c3.png',
+    'https://ancantana.github.io/heaven/original_bd74eb6f0884a30cfb2d0af7943a14f9.png',
+    'https://ancantana.github.io/heaven/original_c14396968eb286bfacdd00e9a0577937.png',
+    'https://ancantana.github.io/heaven/original_c3c5f8eec85f4387b6a842cef208d51b.png'
   ];
 
   imgUrls.forEach((url, i) => {
@@ -83,6 +96,17 @@ function loadGalleryImages() {
 
 function toggleGallery() {
   galleryVisible = !galleryVisible;
+}
+
+function toggleVideoAndText() {
+  videoVisible = !videoVisible;
+  textInput.style('display', videoVisible ? 'block' : 'none');
+}
+
+function takeSnapshot() {
+  let snapshot = createImage(197, 197);
+  snapshot.copy(video, 0, 0, 197, 197, 0, 0, 197, 197);
+  draggedImages.push({ img: snapshot, x: width / 2 - 98.5, y: height / 2 - 98.5, w: 197, h: 197, selected: false });
 }
 
 function drawGallery() {

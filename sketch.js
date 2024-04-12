@@ -48,9 +48,9 @@ function draw() {
   image(videoElement, width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
 
   push();
-  filter(BLUR, 1);
+  filter(BLUR, 5);
   stroke(255);
-  strokeWeight(1);
+  strokeWeight(2);
   noFill();
   rect(width / 2 - videoElement.width / 2 - 1, height / 2 - videoElement.height / 2 - 1, videoElement.width + 2, videoElement.height + 2);
   pop();

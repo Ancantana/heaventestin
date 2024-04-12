@@ -8,7 +8,6 @@ let selectedImage = null;
 let draggedImage = null;
 let dragOffsetX, dragOffsetY;
 let resizeDirection = '';
-let video;
 let videoVisible = false;
 
 function preload() {
@@ -35,10 +34,6 @@ function setup() {
   snapButton.hide();
 
   loadGalleryImages();
-
-  video = createCapture(VIDEO);
-  video.size(197, 197);
-  video.hide();
 }
 
 function draw() {
@@ -71,11 +66,6 @@ function draw() {
     textSize(12);
     text('Resize', x + w - 37.5, y + h - 21);
   }
-
-  // Display video feed
-  if (videoVisible) {
-    image(video, 0, 0, 197, 197);
-  }
 }
 
 function loadGalleryImages() {
@@ -103,19 +93,40 @@ function toggleGallery() {
 function toggleVideoAndText() {
   videoVisible = !videoVisible;
   if (videoVisible) {
-    video.show();
     textInput.show();
     snapButton.show();
+    startVideo();
   } else {
-    video.hide();
     textInput.hide();
     snapButton.hide();
+    stopVideo();
+  }
+}
+
+function startVideo() {
+  const videoElement = document.getElementById('video-element');
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      videoElement.srcObject = stream;
+    })
+    .catch(error => {
+      console.error('Error accessing camera:', error);
+    });
+}
+
+function stopVideo() {
+  const videoElement = document.getElementById('video-element');
+  const stream = videoElement.srcObject;
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+    videoElement.srcObject = null;
   }
 }
 
 function takeSnapshot() {
-  let snapshot = createImage(197, 197);
-  snapshot.copy(video, 0, 0, 197, 197, 0, 0, 197, 197);
+  const videoElement = document.getElementById('video-element');
+  const snapshot = createImage(197, 197);
+  snapshot.drawingContext.drawImage(videoElement, 0, 0, 197, 197);
   let snapshotX = width / 2 - 98.5;
   let snapshotY = height / 2 - 98.5;
   draggedImages.push({ img: snapshot, x: snapshotX, y: snapshotY, w: 197, h: 197, selected: false });

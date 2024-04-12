@@ -18,6 +18,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textInput = select('#text-input');
+  textInput.style('color', 'white');
 
   plusButton = createImg('plusbutton.png', 'plus button');
   plusButton.position(20, 20);
@@ -72,7 +73,11 @@ function draw() {
 
   // Display video feed
   if (videoVisible) {
-    image(video, width / 2 - 98.5, height / 2 - 218.5, 197, 197);
+    let videoWidth = 197;
+    let videoHeight = 197;
+    let videoX = width / 2 - videoWidth / 2;
+    let videoY = height / 2 - videoHeight / 2 - 100;
+    image(video, videoX, videoY, videoWidth, videoHeight);
   }
 }
 
@@ -106,7 +111,9 @@ function toggleVideoAndText() {
 function takeSnapshot() {
   let snapshot = createImage(197, 197);
   snapshot.copy(video, 0, 0, 197, 197, 0, 0, 197, 197);
-  draggedImages.push({ img: snapshot, x: width / 2 - 98.5, y: height / 2 - 98.5, w: 197, h: 197, selected: false });
+  let snapshotX = width / 2 - 98.5;
+  let snapshotY = height / 2 - 98.5;
+  draggedImages.push({ img: snapshot, x: snapshotX, y: snapshotY, w: 197, h: 197, selected: false });
 }
 
 function drawGallery() {

@@ -15,13 +15,16 @@ body {
 
 #control-buttons {
   display: flex;
-  margin-bottom: 20px;
+  flex-direction: column;
+  position: absolute;
+  top: 20px;
+  left: 20px;
 }
 
 #plus-button, #download-button {
   width: 40px;
   height: 40px;
-  margin-right: 10px;
+  margin-bottom: 10px;
   cursor: pointer;
 }
 

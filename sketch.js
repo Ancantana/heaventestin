@@ -84,11 +84,6 @@ function loadGalleryImages() {
     'https://ancantana.github.io/heaventestin/original_372f6230eb41e5f365737fcda89f50c3.png',
     'https://ancantana.github.io/heaventestin/original_bd74eb6f0884a30cfb2d0af7943a14f9.png',
     'https://ancantana.github.io/heaventestin/original_c14396968eb286bfacdd00e9a0577937.png',
-    'https://ancantana.github.io/heaventestin/original_1bf39370ab41d9877da5be74aaa8a7be.png',
-    'https://ancantana.github.io/heaventestin/original_6fa27f5167008a0bf67d02741db541a7 (1).png',
-    'https://ancantana.github.io/heaventestin/original_c5a8f498c4b96dbc72af3e1a4317b2a7.png',
-    'https://ancantana.github.io/heaventestin/original_292a81ed669bf486d90f7623a473a118.png',
-    'https://ancantana.github.io/heaventestin/original_5794348243a0ed808b2510511e613fef.png',
     'https://ancantana.github.io/heaventestin/original_c3c5f8eec85f4387b6a842cef208d51b.png'
   ];
 

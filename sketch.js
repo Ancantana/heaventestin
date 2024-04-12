@@ -8,7 +8,6 @@ let selectedImage = null;
 let dragOffsetX, dragOffsetY;
 let resizeDirection = '';
 let videoElement;
-let isDraggingFromGallery = false;
 
 function preload() {
   bgImage = loadImage('AFTERLIFE.png');
@@ -141,7 +140,6 @@ function mousePressed() {
           dragOffsetX = mouseX - imgX;
           dragOffsetY = mouseY - imgY;
           draggedImageFound = true;
-          isDraggingFromGallery = true;
         }
       }
     });
@@ -181,7 +179,7 @@ function mousePressed() {
 }
 
 function mouseDragged() {
-  if (isDraggingFromGallery) {
+  if (draggedImage) {
     let imgX = mouseX - dragOffsetX;
     let imgY = mouseY - dragOffsetY;
     let imgW = draggedImage.width;
@@ -194,6 +192,7 @@ function mouseDragged() {
       imgY + imgH <= height
     ) {
       draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, selected: false });
+      draggedImage = null;
     }
   } else if (selectedImage) {
     if (resizeDirection === '') {
@@ -209,7 +208,6 @@ function mouseDragged() {
 }
 
 function mouseReleased() {
-  isDraggingFromGallery = false;
   resizeDirection = '';
 }
 

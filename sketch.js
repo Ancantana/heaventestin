@@ -10,7 +10,7 @@ let dragOffsetX, dragOffsetY;
 let resizeDirection = '';
 let video;
 let videoStream;
-let videoVisible = true; // Changed to true to initially display video
+let videoVisible = false;
 
 function preload() {
   bgImage = loadImage('AFTERLIFE.png');
@@ -38,12 +38,8 @@ function setup() {
   loadGalleryImages();
 
   video = createCapture(VIDEO);
-  video.size(320, 240); // Size adjusted to be more standard
-  video.parent('video-container'); // Ensures the video is within the container div
-  video.show();
-
-  textInput.show();
-  snapButton.show();
+  video.size(197, 197);
+  video.hide();
 }
 
 function draw() {
@@ -77,15 +73,27 @@ function draw() {
     text('Resize', x + w - 37.5, y + h - 21);
   }
 
-  // Display video feed
+  // Display video feed and text input
   if (videoVisible) {
-    image(video, 0, 0, 320, 240); // Updated to use new video size
+    push();
+    translate(width / 2, height / 2); // Move the coordinate system to the center
+    image(video, -98.5, -118.5, 197, 197); // Render the video feed centered
+    pop();
+    textInput.show(); // Show the text input
+  } else {
+    textInput.hide(); // Hide the text input
   }
 }
 
 function loadGalleryImages() {
   let imgUrls = [
-    // URLs here
+    'https://ancantana.github.io/heaven/original_77f8f96b25a80928f3f31b83d967fd2d.png',
+    'https://ancantana.github.io/heaven/original_052e51d86c2267360a21d5e9bfb41935.png',
+    'https://ancantana.github.io/heaven/original_29ab04b0486cb7c8845a663e33adfb13.png',
+    'https://ancantana.github.io/heaven/original_372f6230eb41e5f365737fcda89f50c3.png',
+    'https://ancantana.github.io/heaven/original_bd74eb6f0884a30cfb2d0af7943a14f9.png',
+    'https://ancantana.github.io/heaven/original_c14396968eb286bfacdd00e9a0577937.png',
+    'https://ancantana.github.io/heaven/original_c3c5f8eec85f4387b6a842cef208d51b.png'
   ];
 
   imgUrls.forEach((url, i) => {
@@ -99,22 +107,46 @@ function toggleGallery() {
   galleryVisible = !galleryVisible;
 }
 
+function startVideo() {
+  if (!videoStream) {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        videoStream = stream;
+        video.elt.srcObject = stream;
+        video.play();
+      })
+      .catch(error => {
+        console.error('Error accessing camera:', error);
+      });
+  }
+}
+
+function stopVideo() {
+  if (videoStream) {
+    videoStream.getTracks().forEach(track => track.stop());
+    videoStream = null;
+  }
+}
+
 function toggleVideoAndText() {
   videoVisible = !videoVisible;
   if (videoVisible) {
     textInput.show();
     snapButton.show();
+    startVideo();
   } else {
     textInput.hide();
     snapButton.hide();
+    stopVideo();
   }
 }
 
 function takeSnapshot() {
-  let snapshot = video.get();
-  let snapshotX = width / 2 - 160; // Half of the video's width
-  let snapshotY = height / 2 - 120; // Half of the video's height
-  draggedImages.push({ img: snapshot, x: snapshotX, y: snapshotY, w: 320, h: 240, selected: false });
+  let snapshot = createImage(197, 197);
+  snapshot.copy(video, 0, 0, 197, 197, 0, 0, 197, 197);
+  let snapshotX = width / 2 - 98.5;
+  let snapshotY = height / 2 - 98.5;
+  draggedImages.push({ img: snapshot, x: snapshotX, y: snapshotY, w: 197, h: 197, selected: false });
 }
 
 function drawGallery() {
@@ -143,17 +175,104 @@ function drawGallery() {
 }
 
 function mousePressed() {
-  // Mouse pressed events
+  if (dist(mouseX, mouseY, 20, 20) < 20) {
+    toggleGallery();
+  } else {
+    galleryImages.forEach((img, i) => {
+      if (img && img.width > 0 && img.height > 0) {
+        let imgX = width - 320;
+        let imgY = i * 110 + 10;
+        let imgW = 100;
+        let imgH = 100;
+
+        if (mouseX >= imgX && mouseX <= imgX + imgW && mouseY >= imgY && mouseY <= imgY + imgH) {
+          draggedImage = img;
+          dragOffsetX = mouseX - imgX;
+          dragOffsetY = mouseY - imgY;
+        }
+      }
+    });
+
+    // Check if the mouse is over a dragged image
+    draggedImages.forEach((draggedImg, i) => {
+      let { img, x, y, w, h } = draggedImg;
+      if (
+        mouseX >= x &&
+        mouseX <= x + w &&
+        mouseY >= y &&
+        mouseY <= y + h
+      ) {
+        selectedImage = draggedImg;
+        selectedImage.selected = true;
+        dragOffsetX = mouseX - x;
+        dragOffsetY = mouseY - y;
+
+        // Check if the mouse is over the resize button of the selected image
+        if (
+          mouseX >= x + w - 65 &&
+          mouseX <= x + w - 10 &&
+          mouseY >= y + h - 32 &&
+          mouseY <= y + h - 10
+        ) {
+          resizeDirection = 'se';
+        }
+      }
+    });
+
+    // Deselect the image if clicked outside
+    if (!selectedImage) {
+      draggedImages.forEach((draggedImg) => {
+        draggedImg.selected = false;
+      });
+    }
+  }
 }
 
 function mouseDragged() {
-  // Mouse dragged events
+  if (draggedImage) {
+    // Update the position of the dragged image
+    let imgX = mouseX - dragOffsetX;
+    let imgY = mouseY - dragOffsetY;
+    let imgW = draggedImage.width;
+    let imgH = draggedImage.height;
+
+    // Check if the dragged image is outside the gallery
+    if (
+      imgX < width - 330 ||
+      imgX + imgW > width - 3 ||
+      imgY < 0 ||
+      imgY + imgH > height
+    ) {
+      // Add the dragged image to the draggedImages array
+      draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, selected: false });
+      draggedImage = null;
+    }
+  } else if (selectedImage) {
+    // Check if the selected image is being moved
+    if (resizeDirection === '') {
+      selectedImage.x = mouseX - dragOffsetX;
+      selectedImage.y = mouseY - dragOffsetY;
+    }
+
+    // Check if the selected image is being resized
+    if (resizeDirection === 'se') {
+      selectedImage.w = mouseX - selectedImage.x;
+      selectedImage.h = mouseY - selectedImage.y;
+    }
+  }
 }
 
 function mouseReleased() {
-  // Mouse released events
+  draggedImage = null;
+  resizeDirection = '';
 }
 
 function keyPressed() {
-  // Key pressed events
+  if (keyCode === BACKSPACE && selectedImage) {
+    const index = draggedImages.indexOf(selectedImage);
+    if (index !== -1) {
+      draggedImages.splice(index, 1);
+      selectedImage = null;
+    }
+  }
 }

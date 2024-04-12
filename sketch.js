@@ -106,8 +106,8 @@ function drawGallery() {
     if (img && img.width > 0 && img.height > 0) {
       let imgX = width - 320;
       let imgY = i * 110 + 10;
-      let imgW = 50;
-      let imgH = 50;
+      let imgW = 100;
+      let imgH = 100;
 
       if (galleryVisible) {
         image(img, imgX, imgY, imgW, imgH);
@@ -130,8 +130,8 @@ function mousePressed() {
       if (img && img.width > 0 && img.height > 0) {
         let imgX = width - 320;
         let imgY = i * 110 + 10;
-        let imgW = 50;
-        let imgH = 50;
+        let imgW = 100;
+        let imgH = 100;
 
         if (mouseX >= imgX && mouseX <= imgX + imgW && mouseY >= imgY && mouseY <= imgY + imgH) {
           draggedImage = img;

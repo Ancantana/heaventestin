@@ -29,10 +29,12 @@ function setup() {
   downloadButton.size(40, 40);
   downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
 
-  videoElement = createCapture(VIDEO);
-  videoElement.size(197, 197);
-  videoElement.position(width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
-  videoElement.style('border-radius', '18px');
+  videoElement = createCapture(VIDEO, () => {
+    videoElement.size(197, 197);
+    videoElement.position(width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
+    videoElement.style('border-radius', '18px');
+    videoElement.hide();
+  });
 
   loadGalleryImages();
 }
@@ -45,15 +47,14 @@ function draw() {
     drawGallery();
   }
 
-  image(videoElement, width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
-
   push();
-  filter(BLUR, 5);
   stroke(255);
-  strokeWeight(2);
+  strokeWeight(1);
   noFill();
-  rect(width / 2 - videoElement.width / 2 - 1, height / 2 - videoElement.height / 2 - 1, videoElement.width + 2, videoElement.height + 2);
+  rect(width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2, videoElement.width, videoElement.height);
   pop();
+
+  image(videoElement, width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
 
   draggedImages.forEach(({ img, x, y, w, h }) => {
     image(img, x, y, w, h);

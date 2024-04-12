@@ -100,7 +100,7 @@ function toggleGallery() {
 
 function drawGallery() {
   fill(255);
-  rect(width - 220, 0, 237, height);
+  rect(width - 320, 0, 337, height);
 
   galleryImages.forEach((img, i) => {
     if (img && img.width > 0 && img.height > 0) {

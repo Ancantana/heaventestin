@@ -5,7 +5,6 @@ let galleryImages = [];
 let draggedImages = [];
 let plusButton, downloadButton;
 let selectedImage = null;
-let draggedImage = null;
 let dragOffsetX, dragOffsetY;
 let resizeDirection = '';
 let videoElement;
@@ -209,7 +208,20 @@ function mouseDragged() {
 }
 
 function mouseReleased() {
-  if (!draggedImage) {
+  if (draggedImage) {
+    let imgX = mouseX - dragOffsetX;
+    let imgY = mouseY - dragOffsetY;
+    let imgW = draggedImage.width;
+    let imgH = draggedImage.height;
+
+    if (
+      imgX >= width - 330 &&
+      imgX + imgW <= width - 3 &&
+      imgY >= 0 &&
+      imgY + imgH <= height
+    ) {
+      draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, selected: false });
+    }
     draggedImage = null;
   }
   resizeDirection = '';

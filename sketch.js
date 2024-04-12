@@ -18,6 +18,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   textInput = createInput('');
   textInput.position(width / 2 - textInput.width / 2, height / 2 + 100);
+  textInput.style('color', 'white'); // Change text color to white
 
   plusButton = createImg('plusbutton.png', 'plus button');
   plusButton.position(20, 20);
@@ -32,7 +33,7 @@ function setup() {
   videoElement = createCapture(VIDEO, () => {
     videoElement.size(197, 197);
     videoElement.position(width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
-    videoElement.style('border-radius', '8px');
+    videoElement.style('border-radius', '18px');
     videoElement.hide();
   });
 
@@ -100,7 +101,7 @@ function toggleGallery() {
 
 function drawGallery() {
   fill(255);
-  rect(width - 330, 0, 337, height);
+  rect(width - 330, 0, 327, height);
 
   galleryImages.forEach((img, i) => {
     if (img && img.width > 0 && img.height > 0) {
@@ -126,6 +127,8 @@ function mousePressed() {
   if (dist(mouseX, mouseY, 20, 20) < 20) {
     toggleGallery();
   } else {
+    let draggedImageFound = false;
+
     galleryImages.forEach((img, i) => {
       if (img && img.width > 0 && img.height > 0) {
         let imgX = width - 320;
@@ -137,38 +140,41 @@ function mousePressed() {
           draggedImage = img;
           dragOffsetX = mouseX - imgX;
           dragOffsetY = mouseY - imgY;
+          draggedImageFound = true;
         }
       }
     });
 
-    draggedImages.forEach((draggedImg, i) => {
-      let { img, x, y, w, h } = draggedImg;
-      if (
-        mouseX >= x &&
-        mouseX <= x + w &&
-        mouseY >= y &&
-        mouseY <= y + h
-      ) {
-        selectedImage = draggedImg;
-        selectedImage.selected = true;
-        dragOffsetX = mouseX - x;
-        dragOffsetY = mouseY - y;
-
+    if (!draggedImageFound) {
+      draggedImages.forEach((draggedImg, i) => {
+        let { img, x, y, w, h } = draggedImg;
         if (
-          mouseX >= x + w - 65 &&
-          mouseX <= x + w - 10 &&
-          mouseY >= y + h - 32 &&
-          mouseY <= y + h - 10
+          mouseX >= x &&
+          mouseX <= x + w &&
+          mouseY >= y &&
+          mouseY <= y + h
         ) {
-          resizeDirection = 'se';
-        }
-      }
-    });
+          selectedImage = draggedImg;
+          selectedImage.selected = true;
+          dragOffsetX = mouseX - x;
+          dragOffsetY = mouseY - y;
 
-    if (!selectedImage) {
-      draggedImages.forEach((draggedImg) => {
-        draggedImg.selected = false;
+          if (
+            mouseX >= x + w - 65 &&
+            mouseX <= x + w - 10 &&
+            mouseY >= y + h - 32 &&
+            mouseY <= y + h - 10
+          ) {
+            resizeDirection = 'se';
+          }
+        }
       });
+
+      if (!selectedImage) {
+        draggedImages.forEach((draggedImg) => {
+          draggedImg.selected = false;
+        });
+      }
     }
   }
 }

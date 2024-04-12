@@ -36,13 +36,13 @@ function setup() {
   video = createCapture(VIDEO);
   video.size(197, 197);
   video.hide();
-
-  if (bgImage) {
-    background(bgImage); // Display the background image once
-  }
 }
 
 function draw() {
+  if (bgImage) {
+    background(bgImage); // Display the background image once
+  }
+
   if (galleryVisible) {
     drawGallery();
   }

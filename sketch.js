@@ -18,7 +18,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   textInput = createInput('');
   textInput.position(width / 2 - textInput.width / 2, height / 2 + 100);
-  textInput.style('color', 'white'); // Change text color to white
+  textInput.style('color', 'white');
 
   plusButton = createImg('plusbutton.png', 'plus button');
   plusButton.position(20, 20);
@@ -209,7 +209,9 @@ function mouseDragged() {
 }
 
 function mouseReleased() {
-  draggedImage = null;
+  if (!draggedImage) {
+    draggedImage = null;
+  }
   resizeDirection = '';
 }
 

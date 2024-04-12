@@ -13,7 +13,7 @@ let videoStream;
 let videoVisible = false;
 
 function preload() {
-  bgImage = loadImage('AFTERLIFE.png');
+  bgImage = loadImage('AFTERLIFE.png'); // Make sure the path is correct
 }
 
 function setup() {
@@ -39,9 +39,8 @@ function setup() {
 }
 
 function draw() {
-  if (bgImage) {
-    background(bgImage);
-  }
+  background(bgImage); // Display the background image
+
   if (galleryVisible) {
     drawGallery();
   }

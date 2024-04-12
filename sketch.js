@@ -33,8 +33,6 @@ function setup() {
   videoElement.size(197, 197);
   videoElement.position(width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
   videoElement.style('border-radius', '18px');
-  videoElement.style('border', '1px solid white');
-  filter(BLUR, 1);
 
   loadGalleryImages();
 }
@@ -46,6 +44,13 @@ function draw() {
   if (galleryVisible) {
     drawGallery();
   }
+
+  push();
+  stroke(255);
+  strokeWeight(1);
+  filter(BLUR, 1);
+  rect(width / 2 - videoElement.width / 2 - 1, height / 2 - videoElement.height / 2 - 1, videoElement.width + 2, videoElement.height + 2);
+  pop();
 
   image(videoElement, width / 2 - videoElement.width / 2, height / 2 - videoElement.height / 2);
 
